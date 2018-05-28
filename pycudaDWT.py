@@ -193,7 +193,7 @@ class PycudaWaveletTransform:
                       block=block, grid=grid, shared=shared_mem_size)
 
         for d in range(1, depth):
-            grid_x = int(out_sizes[d-1] / block[0]) + (1 if out_sizes[d-1] % block[0] else 0)
+            grid_x = int(out_sizes[d] / block[0]) + (1 if out_sizes[d] % block[0] else 0)
             grid = (grid_x, grid_y, 1)
             self._dwt_row(approx_device_arrays[d-1], approx_device_arrays[d], detail_device_arrays[d],
                           numpy.int32(num_rows), numpy.int32(out_sizes[d-1]), numpy.int32(1),
