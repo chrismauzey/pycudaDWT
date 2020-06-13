@@ -313,7 +313,7 @@ class PycudaWaveletTransform:
         grid_x = int(in_sizes[0] / block[0]) + (1 if in_sizes[0] % block[0] else 0)
         grid_y = int(num_rows / block[1]) + (1 if num_rows % block[1] else 0)
         grid = (grid_x, grid_y, 1)
-        shared_mem_size = block[2]*block[1]*(2*(int(self._dec_length/2) + block[0] - 1))*self._dtype().itemsize
+        shared_mem_size = block[2] * block[1] * (2*(int(self._dec_length/2) + block[0] - 1)) * self._dtype().itemsize
         self._idwt_row(input_device_list[0], input_device_list[1], approx_device_arrays[0],
                        numpy.int32(num_rows), numpy.int32(in_shape[-1]), numpy.int32(in_sizes[0]), numpy.int32(1),
                        block=block, grid=grid, shared=shared_mem_size)
@@ -436,7 +436,9 @@ class PycudaWaveletTransform:
         row_grid_y = int(num_rows / row_block[1]) + (1 if num_rows % row_block[1] else 0)
         row_grid_z = int(num_slices / row_block[2]) + (1 if num_slices % row_block[2] else 0)
         row_grid = (row_grid_x, row_grid_y, row_grid_z)
-        shared_mem_size = row_block[2]*row_block[1]*(self._dec_length + 2*(row_block[0] - 1))*self._dtype().itemsize
+        shared_mem_size = (row_block[2] * row_block[1]
+                           * (self._dec_length + 2*(row_block[0] - 1))
+                           * self._dtype().itemsize)
         self._dwt_row(input_device_array, row_approx_device_array, row_detail_device_array,
                       numpy.int32(num_rows), numpy.int32(num_cols), numpy.int32(num_slices),
                       block=row_block, grid=row_grid, shared=shared_mem_size)
@@ -631,8 +633,9 @@ class PycudaWaveletTransform:
         row_grid_y = int(out_rows[0] / row_block[1]) + (1 if out_rows[0] % row_block[1] else 0)
         row_grid_z = int(num_slices / row_block[2]) + (1 if num_slices % row_block[2] else 0)
         row_grid = (row_grid_x, row_grid_y, row_grid_z)
-        shared_mem_size = row_block[2] * row_block[1] * (
-                2 * (int(self._dec_length / 2) + row_block[0] - 1)) * self._dtype().itemsize
+        shared_mem_size = (row_block[2] * row_block[1]
+                           * (2 * (int(self._dec_length / 2) + row_block[0] - 1))
+                           * self._dtype().itemsize)
         self._idwt_row(row_approx_device_array, row_detail_device_array, approx_device_array,
                        numpy.int32(out_rows[0]), numpy.int32(in_cols[0]), numpy.int32(in_cols[0]),
                        numpy.int32(num_slices),
